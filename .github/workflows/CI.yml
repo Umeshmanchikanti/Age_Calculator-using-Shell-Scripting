@@ -41,9 +41,9 @@ jobs:
         run: npm test
 
       # Step 6: Deploy 
-      runs-on: ubuntu-latest
-    needs: test
-    steps:
+      - runs-on: ubuntu-latest
+        needs: test
+        steps:
       - name: Checkout Code
         uses: actions/checkout@v3
 
