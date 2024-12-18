@@ -49,9 +49,27 @@ jobs:
           echo "Files in the directory:"
           ls -al
 
-      # Step 8: Simulate Deployment
-      - name: Simulate Deployment
+      # Step 8: Configure AWS Credentials
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1  # Change to your AWS region
+
+      # Step 9: Deploy to AWS (Example for S3 Deployment)
+      - name: Deploy to S3
         run: |
-          echo "Deploying to test environment..."
-          echo "Deployment successful!"
+          aws s3 sync ./build s3://umesh27bucket --delete
+          echo "Deployment to S3 completed!"
+
+      # Step 10: (Optional) Additional AWS Deployment Commands
+      # Example for ECS, Lambda, etc.
+      # - name: Deploy to ECS
+      #   run: |
+      #     aws ecs update-service --cluster your-cluster-name --service your-service-name --force-new-deployment
+      #
+      # - name: Deploy Lambda Function
+      #   run: |
+      #     aws lambda update-function-code --function-name your-lambda-name --zip-file fileb://path-to-deployment-package.zip
 
