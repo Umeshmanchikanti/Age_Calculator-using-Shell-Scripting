@@ -22,27 +22,14 @@ jobs:
           echo Add other actions to build,
           echo test, and deploy your project.
 
-  # Deploy job
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build # Ensures deploy job runs after build
-    steps:
-      - name: Checkout the code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js (if using a static site generator or bundler)
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-
-      - name: Install dependencies and build project
+      - name: Create a sample artifact
         run: |
-          npm install
-          npm run build # Customize based on your build script
+          mkdir -p output
+          echo "This is a sample artifact" > output/artifact.txt
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build # Replace with the directory containing the built files
+          name: build-artifact
+          path: ./output
 
