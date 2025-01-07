@@ -6,13 +6,13 @@ echo "Welcome to the Age Calculator!"
 
 # Ask for the user's name
 echo -n "What is your name? "
-read USER_NAME
+read -r USER_NAME
 
 # Use a variable to greet the user
 echo "Hello, $USER_NAME! Nice to here from you."
 
 echo -n "Please enter your date of birth (YYYY-MM-DD): "
-read DOB
+read -r DOB
 
 # Validate the input format using a regular expression
 if ! [[ "$DOB" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
