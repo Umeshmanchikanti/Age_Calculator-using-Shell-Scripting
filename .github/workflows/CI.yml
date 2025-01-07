@@ -54,5 +54,5 @@ jobs:
     - name: Deploy Shell Scripts
       run: |
         scp *.sh user@<your-server-ip-or-hostname>:/path/to/deployment/
-        ssh user@<your-server-ip-or-hostname> "chmod +x /path/to/deployment/*.sh && /path/to/deployment/deploy.sh"
+        ssh user@18.206.121.69 "chmod +x /path/to/deployment/*.sh && /path/to/deployment/deploy.sh"
 
