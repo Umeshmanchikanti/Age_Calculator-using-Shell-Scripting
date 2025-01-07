@@ -1,34 +1,58 @@
-name: CI
+name: CI/CD Pipeline for Shell Scripts
 
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "main" ]
+    branches:
+      - main
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
+    name: Build & Test
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+    - name: Checkout Code
+      uses: actions/checkout@v3
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+    - name: Install ShellCheck
+      run: sudo apt-get install -y shellcheck
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+    - name: Lint Shell Scripts
+      run: |
+        shellcheck *.sh
+
+    - name: Run Unit Tests
+      run: |
+        # Example: Test if scripts execute without syntax errors
+        for script in *.sh; do
+          bash -n "$script" || exit 1
+        done
+      shell: bash
+
+  deploy:
+    name: Deployment
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Set Up SSH Key
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      run: |
+        mkdir -p ~/.ssh
+        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H <your-server-ip-or-hostname> >> ~/.ssh/known_hosts
+
+    - name: Deploy Shell Scripts
+      run: |
+        scp *.sh user@<your-server-ip-or-hostname>:/path/to/deployment/
+        ssh user@<your-server-ip-or-hostname> "chmod +x /path/to/deployment/*.sh && /path/to/deployment/deploy.sh"
+
