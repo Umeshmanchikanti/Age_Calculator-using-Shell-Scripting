@@ -49,10 +49,10 @@ jobs:
         mkdir -p ~/.ssh
         echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan -H 18.206.121.69 >> ~/.ssh/known_hosts
+        ssh-keyscan -H 172.31.87.198 >> ~/.ssh/known_hosts
 
     - name: Deploy Shell Scripts
       run: |
-        scp *.sh ec2-user@18.206.121.69:~/deployment/
-        ssh ec2-user@18.206.121.69 "chmod +x ~/deployment/*.sh""
+        scp *.sh ec2-user@172.31.87.198:~/deployment/
+        ssh ec2-user@172.31.87.198 "chmod +x ~/deployment/*.sh""
 
