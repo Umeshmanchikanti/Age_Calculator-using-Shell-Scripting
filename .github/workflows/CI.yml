@@ -49,7 +49,7 @@ jobs:
         mkdir -p ~/.ssh
         echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan -H <your-server-ip-or-hostname> >> ~/.ssh/known_hosts
+        ssh-keyscan -H 18.206.121.69 >> ~/.ssh/known_hosts
 
     - name: Deploy Shell Scripts
       run: |
