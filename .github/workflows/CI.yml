@@ -53,6 +53,6 @@ jobs:
 
     - name: Deploy Shell Scripts
       run: |
-        scp *.sh user@18.206.121.69~/deployment/
+        scp *.sh ec2-user@18.206.121.69~/deployment/
         ssh ec2-user@18.206.121.69 "chmod +x ~/deployment/*.sh""
 
